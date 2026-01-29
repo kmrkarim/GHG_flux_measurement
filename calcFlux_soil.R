@@ -44,21 +44,30 @@ calcFlux <-
   function(v,
            p,
            r = 0.83144598,
-           s = 83.7,
+           s = 83.7,  # default soil/leaf area in cm²
            t,
            slope,
-           gas = c('co2', 'ch4', 'n2o','h2o')) {
-    # Note: in a gas mixture, ppm is equivalent to umol.mol-1
-    t <- t + 273.15 # Convert °C to K
-    
-    if (gas == "co2"|| gas == 'h2o') {
-      fc <- ((10 * v * p) / (r * s * t)) * slope # umol.m-2.s-1
-    } else if (gas == 'ch4' || gas == 'n2o') {
-      fc <-
-        (((10 * v * p) / (r * s * t)) * slope) * 1000 # nanomol.m-2.s-1
+           gas) {
+
+    # Convert °C to K
+    t <- t + 273.15
+
+    if (gas == "co2" || gas == "h2o") {
+      # µmol m-2 s-1
+      fc <- ((10 * v * p) / (r * s * t)) * slope
+
+    } else if (gas == "ch4") {
+      # nmol m-2 s-1
+      fc <- (((10 * v * p) / (r * s * t)) * slope) * 1000
+
+    } else if (gas == "n2o") {
+      # pmol m-2 s-1
+      fc <- (((10 * v * p) / (r * s * t)) * slope) * 1e6
+
     } else {
-      cat('Unknown gas. Should either be co2, ch4, or n2o')
+      stop("Unknown gas. Use: 'co2', 'ch4', 'n2o', or 'h2o'")
     }
+
     return(fc)
   }
 
