@@ -74,11 +74,8 @@ calcFlux <-
 
 
 
-
-
 ronydata <- read.csv("/Users/ronysmac/Downloads/Fluxester/data/combined_lgr_slope_fall_soil_spring_downsview.csv")
 str(ronydata)
-
 
 
 
